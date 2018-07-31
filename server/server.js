@@ -1,71 +1,26 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+const {mongoose} = require ('./db/mongoose.js');
+const {Todo} = require('./models/todo.js');
+const {User} = require('./models/user.js');
 
-// let Todo = mongoose.model('Todo', {
-//    text: {
-//     type: String, 
-//     required: true,
-//     minlength: 1,
-//     trim: true
-//    },
-//    completed: {
-//     type: Boolean,
-//     default: false
-//    },
-//    completedAt: {
-//     type: Number,
-//     default: null
-//    }
-// });
+const app = express();
 
-// let firstNewTodo = new Todo({
-//     text: 'Cook ramen'
-// });
+app.use(bodyParser.json());
 
-// firstNewTodo.save().then((doc) => {
-//     console.log('Saved todo', doc)
-// }, (e) => {
-//     console.log('Unable to save todo')
-// });
+app.post('/todos', (req, res) => {
+    const todo = new Todo({
+        text: req.body.text
+    });
 
-// let secondNewTodo = new Todo ({
-//     text: 'something to do'
-// })
+    todo.save().then((doc) => {
+        res.send(doc)
+    }, (e) => {;
+        res.status(400).send(e)
+    })
+});
 
-// secondNewTodo.save().then((doc) => {
-//     console.log('Saved todo', doc)
-// }, (e) => {
-//     console.log('Unable to save todo')
-// });
-
-let User = mongoose.model('User', {
-    text: {
-     type: String, 
-     required: true,
-     minlength: 1,
-     trim: true
-    }
- });
-
- let newUser = new User({
-     text: ' sirajbrepotra@example.com '
- });
-
- newUser.save().then((doc) => {
-     console.log('Saved user', doc)
- }, (e) => {
-     console.log('Unable to save todo')
- })
- 
-//   let otherUser = new User({
-//      text: '                  '
-//  });
-
-//  otherUser.save().then((doc) => {
-//      console.log('Saved user', doc)
-//  }, (e) => {
-//      console.log('Unable to save todo')
-//  })
- 
+app.listen(3000, () => {
+    console.log('Listening on port 3000');
+});
