@@ -87,7 +87,7 @@ describe ('GET /todos/:id', () => {
         .end(done)
     });
 
-    it('should nor return todo doc created by other user', (done) => {
+    it('should not return todo doc created by other user', (done) => {
         request(app)
         .get(`/todos/${todos[1]._id.toHexString()}`)
         .set('x-auth', users[0].tokens[0].token)
@@ -166,7 +166,7 @@ describe('DELETE /todos/:id', () => {
         .end(done)
     });
 
-    it('should return 404 if object id is invalid', (done) => {
+    it('should return 404 if object ID is invalid', (done) => {
         request(app)
         .delete('/todos/123')
         .set('x-auth', users[1].tokens[0].token)
